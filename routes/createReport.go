@@ -35,23 +35,16 @@ func CreateReport(c *fiber.Ctx) error {
 
 	// Retrieve the HR from the database using HRID
 	var hr models.HR
-	hrResult := database.Database.Db.First(&hr, newReport.HRID)
+	hrResult := database.Database.Db.Where("id = ?", newReport.HRID).First(&hr)
+
 	if hrResult.Error != nil {
-		return c.Status(500).SendString("Error finding HR: " + hrResult.Error.Error())
+		return c.Status(500).SendString("Error retrieving HR")
 	}
+	log.Printf("HR with ID %v retrieved successfully\n", newReport.HRID)
 
-	if hrResult.RowsAffected == 0 {
-		return c.Status(404).SendString("HR not found")
-	}
-
-	// Append the new report to the Reports array of the HR
 	hr.Reports = append(hr.Reports, newReport)
-
-	// Save the updated HR back to the database
-	updateResult := database.Database.Db.Save(&hr)
-	if updateResult.Error != nil {
-		return c.Status(500).SendString("Error updating HR: " + updateResult.Error.Error())
-	}
+	database.Database.Db.Save(&hr).Debug()
+	database.Database.Db.Model(&hr).Association("Reports").Append(&newReport)
 
 	responseReport := CreateResponseReport(newReport)
 	log.Printf("Report with ID %v created successfully\n", newReport.ID)

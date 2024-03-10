@@ -35,6 +35,7 @@ func main() {
 	app.Post("/login/employee", routes.LoginEmployee)
 	//Report Routes
 	app.Post("/report/create", routes.CreateReport)
+	app.Get("/report/fetch", routes.FetchReportsForHR)
 	//Get Routes
 	app.Get("/get/employee", routes.GetEmployee)
 	app.Get("/get/hr", routes.GetHR)

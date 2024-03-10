@@ -66,23 +66,6 @@ func SignUpEmployee(c *fiber.Ctx) error {
 		return c.Status(500).SendString("Error creating Employee")
 	}
 
-	//Append the employee to the employees array of HR model having that company ID
-	var hr models.HR
-	hrResult := database.Database.Db.Where("id = ?", newEmployee.CompanyID).First(&hr)
-	if hrResult.Error != nil {
-		log.Printf("Error finding HR: %v\n", hrResult.Error)
-		return c.Status(500).SendString("Error finding HR")
-	}
-	log.Printf("HR found: %v\n", hr)
-
-	hr.Employees = append(hr.Employees, newEmployee)
-	log.Printf("%v", hr.Employees)
-	hrResult = database.Database.Db.Save(&hr)
-	if hrResult.Error != nil {
-		log.Printf("Error saving HR: %v\n", hrResult.Error)
-		return c.Status(500).SendString("Error saving HR")
-	}
-
 	newEmployeeResponse := CreateResponseEmployee(newEmployee)
 	log.Printf("Employee with ID %v created successfully\n", newEmployee.ID)
 
