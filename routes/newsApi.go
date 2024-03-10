@@ -29,7 +29,7 @@ func ReturnNews(c *fiber.Ctx) error {
 
 	// If the search keyword is empty, search for female harassment news
 	if query == "" {
-		query = "female%20harass"
+		query = "women safety"
 	}
 
 	log.Printf("Search keyword: %v", query)
@@ -101,15 +101,18 @@ func ReturnNews(c *fiber.Ctx) error {
 
 	//Print the newslist one by one, with column name
 	for i, news := range newsList {
-		log.Printf("Index: %v\n", i)
-		log.Printf("Title: %v\n", news.Title)
-		log.Printf("Description: %v\n", news.Description)
-		log.Printf("URL: %v\n", news.URL)
-		log.Printf("Image URL: %v\n", news.ImageURL)
-		log.Printf("Published At: %v\n", news.PublishedAt)
-		log.Printf("Source: %v\n", news.Source)
-		log.Printf("Author: %v\n\n\n", news.Author)
+		log.Printf("Index: %v, Title: %v\n", i, news.Title)
+		// log.Printf("Title: %v\n", news.Title)
+		// log.Printf("Description: %v\n", news.Description)
+		// log.Printf("URL: %v\n", news.URL)
+		// log.Printf("Image URL: %v\n", news.ImageURL)
+		// log.Printf("Published At: %v\n", news.PublishedAt)
+		// log.Printf("Source: %v\n", news.Source)
+		// log.Printf("Author: %v\n\n\n", news.Author)
 	}
+
+	//Print the JSON
+	// log.Printf("JSON response: %v", string(body))
 
 	// Return the JSON response
 	return c.Send(body)

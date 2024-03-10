@@ -4,7 +4,8 @@ import (
 	"log"
 	"os"
 
-	"gorm.io/driver/postgres"
+	"github.com/manan04shah/n-queens-backend/models"
+	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 )
@@ -15,8 +16,8 @@ type DbInstance struct {
 
 var Database DbInstance
 
-func connectDb() {
-	db, err := gorm.Open(postgres.Open("api.db"), &gorm.Config{})
+func ConnectDb() {
+	db, err := gorm.Open(sqlite.Open("api.db"), &gorm.Config{})
 
 	if err != nil {
 		log.Fatal("Could not connect to the database")
@@ -26,7 +27,8 @@ func connectDb() {
 	log.Println("Connected to the database successfully")
 	db.Logger = logger.Default.LogMode(logger.Info)
 	log.Println("Running Migrations")
-	//TODO: Add Migrations
+
+	db.AutoMigrate(&models.Employee{}, &models.HR{}, &models.Report{})
 
 	Database = DbInstance{Db: db}
 }
